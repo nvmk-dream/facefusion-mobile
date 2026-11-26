@@ -29,7 +29,7 @@ val keystoreProps = Properties().apply {
     if (f.exists()) f.inputStream().use { load(it) }
 }
 
-val hasContentGate = file("src/main/java/com/facefusion/mobile/ContentGate.kt").exists()
+val hasContentGate = false
 val variantTag = if (hasContentGate) "" else "-dev"
 
 // `dev` is a SEPARATE APP, not a differently-signed one.  Android identifies an installed
@@ -110,8 +110,10 @@ val qnnStage by tasks.registering {
     }
 }
 
-tasks.named("preBuild") {
-    dependsOn(qnnStage)
+if (providers.gradleProperty("prebuiltNativeDir").orNull == null) {
+    tasks.named("preBuild") {
+        dependsOn(qnnStage)
+    }
 }
 
 // Optional matching native binaries for Kotlin/UI-only builds without the Qualcomm SDK.

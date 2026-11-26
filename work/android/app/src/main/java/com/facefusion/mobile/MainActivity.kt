@@ -4179,7 +4179,7 @@ class MainActivity : ComponentActivity() {
             // The threshold is set HERE rather than inside LiveEngine because the dev line
             // deletes ContentGate.kt: the engine takes a number and knows nothing about the
             // gate, so this single assignment is the whole of what dev has to remove.
-            live.gateThreshold = ContentGate.THRESHOLD
+            live.gateThreshold = Float.NaN
             live.start(this@MainActivity, this@MainActivity) { shot ->
                 // The analyzer thread hands the result straight to Compose state, which is
                 // safe for snapshot state and avoids a per-frame main-thread post.

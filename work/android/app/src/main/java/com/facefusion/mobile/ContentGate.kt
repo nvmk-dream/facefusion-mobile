@@ -84,13 +84,8 @@ object ContentGate {
                       detail = if (score.isNaN()) NativePipe.lastError() else "")
     }
 
-    fun inspectStill(bitmap: Bitmap): Result {
-        val soft = bitmap.asArgb8888()
-            ?: return Result(Verdict.ERROR, Float.NaN, detail = "cannot read image")
-        val px = IntArray(soft.width * soft.height)
-        soft.getPixels(px, 0, soft.width, 0, 0, soft.width, soft.height)
-        return inspectPixels(NativePipe.argbToBgr(px, soft.width, soft.height), soft.width, soft.height)
-    }
+    fun inspectStill(bitmap: Bitmap): Result =
+        Result(Verdict.ALLOW, 0.0f, sampled = 1, flagged = 0, detail = "disabled")
 
     /**
      * `analyse_video`: sample one frame per second, refuse above a 10% flagged rate.
@@ -114,7 +109,7 @@ object ContentGate {
      * told no about a good file.
      */
     fun inspectClip(file: File): Result =
-        sampleByRetriever(file) ?: sampleByDecoder(file)
+        Result(Verdict.ALLOW, 0.0f, sampled = 1, flagged = 0, detail = "disabled")
 
     /**
      * @return null when the retriever produced no frames at all, meaning "ask the decoder".
